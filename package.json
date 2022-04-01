@@ -1,0 +1,25 @@
+{
+  "name": "complexcaptcha",
+  "version": "0.9.9",
+  "description": "Project that aims for generating captcha image with various customization options - for Node.JS",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "example1": "node ./dist/examples/index1.js",
+    "example2": "node ./dist/examples/index2.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.9.1",
+    "eventemitter3": "^4.0.7",
+    "find-package-json": "^1.2.0",
+    "konva": "^8.3.4",
+    "threads": "^1.7.0"
+  },
+  "devDependencies": {
+    "@types/find-package-json": "^1.2.2",
+    "@types/node": "^17.0.21",
+    "typescript": "^4.6.2"
+  }
+}
