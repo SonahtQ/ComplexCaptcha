@@ -5,8 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "build": "npx tsc",
-    "example1": "node ./dist/examples/index1.js",
-    "example2": "node ./dist/examples/index2.js"
+    "example1": "node ./dist/examples/index1.js"
   },
   "author": "",
   "license": "ISC",
