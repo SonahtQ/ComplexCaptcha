@@ -7,8 +7,13 @@
     "build": "npx tsc",
     "example1": "node ./dist/examples/index1.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "SonahtQ",
+  "license": "GNU GPL",
+  "homepage": "https://github.com/SonahtQ/ComplexCaptcha",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/SonahtQ/ComplexCaptcha"
+  },
   "dependencies": {
     "canvas": "^2.9.1",
     "eventemitter3": "^4.0.7",
