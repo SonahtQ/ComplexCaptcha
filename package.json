@@ -1,6 +1,6 @@
 {
   "name": "complexcaptcha",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Project that aims for generating captcha image with various customization options - for Node.JS",
   "main": "dist/index.js",
   "scripts": {
