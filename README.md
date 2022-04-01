@@ -142,7 +142,7 @@ Object of `GeneratedCaptcha` type contains fields:
 	<tr>
 		<td>maxLength</td>
 		<td><span class="code" lang="ts">number</span></td>
-		<td>Contains text that is displayed on generated image. Including impostors, excluding background text/dummies.</td>
+		<td>Max length of solution can be.</td>
 	</tr>
 	<tr>
 		<td>omitMarked</td>
