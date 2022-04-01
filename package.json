@@ -2,9 +2,9 @@
   "name": "complexcaptcha",
   "version": "0.9.0",
   "description": "Project that aims for generating captcha image with various customization options - for Node.JS",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc --build",
     "example1": "node ./dist/examples/index1.js"
   },
   "author": "SonahtQ",

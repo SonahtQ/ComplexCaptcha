@@ -3,7 +3,7 @@ import * as NodePath from "path";
 
 import FindPkgJson from "find-package-json";
 
-import ComplexCaptcha from "../";
+import ComplexCaptcha from "../src/index";
 
 //
 

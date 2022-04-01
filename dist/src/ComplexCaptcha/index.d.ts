@@ -1,0 +1,35 @@
+import * as Types from "./types";
+import ComplexCaptchaLoader from "./loader";
+export { Types };
+export default class ComplexCaptcha {
+    static get Loader(): typeof ComplexCaptchaLoader;
+    static Generate(options: Types.GenerateOptions): Types.GeneratedCaptcha;
+    private readonly cfg;
+    private readonly palette;
+    private text;
+    private solution;
+    private instructions;
+    private readonly canvas;
+    private readonly $stage;
+    private readonly $layerBackground1;
+    private readonly $layerBackground2;
+    private readonly $layerMain1;
+    private readonly $layerDetails1;
+    private $dummiesShape;
+    private $textShape;
+    private $dirtShape;
+    private constructor();
+    private render;
+    private renderBackground;
+    private renderAdjustStageSize;
+    private renderText;
+    private renderTextUnitsToTextShape;
+    private renderTextUnitToShape;
+    private renderTextSetPositions;
+    private renderImpostorsMarks;
+    private renderImpostorMark;
+    private renderDirt;
+    private renderDirtXorBox;
+    private renderDirtLine;
+    private renderDummies;
+}

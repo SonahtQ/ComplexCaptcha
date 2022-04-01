@@ -5,7 +5,7 @@ import FindPkgJson from "find-package-json";
 
 //
 
-export function GetModuleRootDirectory() {
+export function GetModuleRootDirectoryPath() {
     return NodePath.dirname(FindPkgJson(__dirname).next().filename as string);
 }
 
