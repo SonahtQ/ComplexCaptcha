@@ -69,7 +69,7 @@ fs.writeFileSync(`./captcha__${data.solution}.jpeg`), data.buffer);
  - Ability to disable features for individual provided fonts
  - Ability to disable characters for individual provided fonts
  - Drawing fake captcha text in background with smaller font size (dummies)
- - Drawing dirt on top of captcha (currently only lines)
+ - Drawing dirt on top of captcha
 
 ---
 
