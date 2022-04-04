@@ -18,9 +18,15 @@ export default class ComplexCaptchaConfig {
     }
 
     static DetermineIntegerFromParameter(param: number | [number, number]): number {
-        if ( Array.isArray(param) ) {
+        if ( Array.isArray(param) )
             return Tools.GetRandomInteger(param[0], param[1]);
-        }
+    
+        return param;
+    }
+
+    static DetermineNumberFromParameter(param: number | [number, number]): number {
+        if ( Array.isArray(param) )
+            return Tools.GetRandomNumber(param[0], param[1]);
     
         return param;
     }

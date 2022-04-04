@@ -69,7 +69,7 @@ fs.writeFileSync(`./captcha__${data.solution}.jpeg`), data.buffer);
  - Ability to disable features for individual provided fonts
  - Ability to disable characters for individual provided fonts
  - Drawing fake captcha text in background with smaller font size (dummies)
- - Drawing dirt on top of captcha
+ - Drawing dirt on top of captcha (lines, xor linex/box/islands)
 
 ---
 
@@ -416,7 +416,7 @@ Object of `CharRotationOptions` type contains information about how generator wi
         <td>range</td>
         <td>✔️</td>
         <td><span class="code" lang="ts">[number, number]</span></td>
-        <td><span class="code" lang="ts">[-45, 45]</span></td>
+        <td><span class="code" lang="ts">[-35, 35]</span></td>
         <td>Range of rotation. Character will be rotated by random value in that range.</td>
     </tr>
     <tr>
@@ -582,6 +582,34 @@ Object of `DirtOptions` type contains information about drawings that will be pu
         <td>Value from <span class="code" lang="ts">0</span> (never) to <span class="code" lang="ts">1</span> (always) that describes chance of that feature will be applied to image.</td>
     </tr>
     <tr>
+        <td>chanceForLine</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number</span></td>
+        <td><span class="code" lang="ts">0.5</span></td>
+        <td>Value from <span class="code" lang="ts">0</span> (never) to <span class="code" lang="ts">1</span> (always) that describes chance of "line" dirt will be applied.</td>
+    </tr>
+    <tr>
+        <td>chanceForXorLine</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number</span></td>
+        <td><span class="code" lang="ts">0.5</span></td>
+        <td>Value from <span class="code" lang="ts">0</span> (never) to <span class="code" lang="ts">1</span> (always) that describes chance of "xorLine" dirt will be applied.</td>
+    </tr>
+    <tr>
+        <td>chanceForXorBox</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number</span></td>
+        <td><span class="code" lang="ts">0.5</span></td>
+        <td>Value from <span class="code" lang="ts">0</span> (never) to <span class="code" lang="ts">1</span> (always) that describes chance of "xorBox" dirt will be applied.</td>
+    </tr>
+    <tr>
+        <td>chanceForXorIsland</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number</span></td>
+        <td><span class="code" lang="ts">0.5</span></td>
+        <td>Value from <span class="code" lang="ts">0</span> (never) to <span class="code" lang="ts">1</span> (always) that describes chance of "xorIsland" dirt will be applied.</td>
+    </tr>
+    <tr>
         <td>count</td>
         <td>✔️</td>
         <td><span class="code" lang="ts">number | [number, number]</span></td>
@@ -598,7 +626,7 @@ Object of `DirtOptions` type contains information about drawings that will be pu
     <tr>
         <td>lineWidth</td>
         <td>✔️</td>
-        <td><span class="code" lang="ts">number</span></td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
         <td><span class="code" lang="ts">3</span></td>
         <td>Width of line. Thick lines can make image unreadable for humans.</td>
     </tr>
@@ -615,6 +643,48 @@ Object of `DirtOptions` type contains information about drawings that will be pu
         <td><span class="code" lang="ts">boolean</span></td>
         <td><span class="code" lang="ts">true</span></td>
         <td>Draw line as bezier, works only if <span class="code" lang="ts">lineTension</span> is disabled.</td>
+    </tr>
+    <tr>
+        <td>xorLineWidth</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
+        <td><span class="code" lang="ts">3</span></td>
+        <td>Width of xorLine..</td>
+    </tr>
+    <tr>
+        <td>xorIslandArmCount</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
+        <td><span class="code" lang="ts">30</span></td>
+        <td>Vertex count of polygon, the more You will set, the more island will be rounded, 30 is fine.</td>
+    </tr>
+    <tr>
+        <td>xorIslandArmRadius</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
+        <td><span class="code" lang="ts">40</span></td>
+        <td>Radius/distance of vertexes from the center point of polygon. It can be multiplied by accents (randomly choosen angles where distance is higher.</td>
+    </tr>
+    <tr>
+        <td>xorIslandAccentCount</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
+        <td><span class="code" lang="ts">[1-2]</span></td>
+        <td>Accents count. Accents are angles where radius is multiplied for making shape looking less like circle.</td>
+    </tr>
+    <tr>
+        <td>xorIslandAccentStrength</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
+        <td><span class="code" lang="ts">1.5</span></td>
+        <td>Accent strength. Radius = radius * xorIslandAccentStrength</td>
+    </tr>
+    <tr>
+        <td>xorIslandAccentSensitivity</td>
+        <td>✔️</td>
+        <td><span class="code" lang="ts">number | [number, number]</span></td>
+        <td><span class="code" lang="ts">35</span></td>
+        <td>Accent sensitivity. That value determines how close to accent (radius/distance of vertex from center) starts to be multiplied.</td>
     </tr>
 </table>
 

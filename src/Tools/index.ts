@@ -48,3 +48,57 @@ export function GetFolderListInDirectory(dirPath: string) {
         .filter(file => file.isDirectory())
         .map(file => file.name);
 }
+
+export function RandomizeArrayElementByShares<A extends {share: number}>(array: A[]) {
+    const total = array.reduce((curr, x) => curr + x.share, 0);
+
+    //
+
+    if ( total ) {
+        const relativeToTotal = array.map(x => x.share / total);
+
+        const cumulative = relativeToTotal.map((share, i, arr) => {
+            return share + arr.slice(0, i).reduce((curr, x) => curr + x, 0);
+        });
+
+        const randVal = Math.random();
+
+        //
+
+        for ( var i=0; i<cumulative.length; i++ ) {
+            const val = cumulative[i];
+
+            if ( randVal <= val )
+                return array[i];
+        }
+    }
+
+    //
+
+    return null;
+}
+
+export function NormalizeAngle(angle: number) {
+    let result = angle % 360;
+    return result < 0 ? result + 360 : result;
+}
+
+export function AngleDiff(alpha: number, beta: number) {
+    const phi = Math.abs(beta - alpha) % 360;
+    const distance = phi > 180 ? 360 - phi : phi;
+
+    return distance;
+}
+
+export function AngleToRadians(angle: number) {
+    return (Math.PI / 180) * angle;
+}
+
+export function CalcPointOnCircle(x: number, y: number, radius: number, angle: number) {
+    const px = x + radius * Math.cos(AngleToRadians(angle-90));
+    const py = y + radius * Math.sin(AngleToRadians(angle-90));
+
+    //
+
+    return [px, py];
+}

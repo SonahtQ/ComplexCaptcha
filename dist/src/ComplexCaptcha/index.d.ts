@@ -18,6 +18,7 @@ export default class ComplexCaptcha {
     private $dummiesShape;
     private $textShape;
     private $dirtShape;
+    private $dirtXorShape;
     private constructor();
     private render;
     private renderBackground;
@@ -30,6 +31,7 @@ export default class ComplexCaptcha {
     private renderImpostorMark;
     private renderDirt;
     private renderDirtXorBox;
+    private renderDirtXorIsland;
     private renderDirtLine;
     private renderDummies;
 }

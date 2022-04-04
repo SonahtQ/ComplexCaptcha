@@ -40,7 +40,7 @@ export const CharRotationOptions: Required<Types.CharRotationOptions> = {
 
     excludeChars:   false,
 
-    range:          [-45, 45]
+    range:          [-35, 35]
 }
 
 export const CharDeformation: Required<Types.CharDeformationOptions> = {
@@ -75,14 +75,27 @@ export const ImpostorsOptions: Required<Types.ImpostorsOptions> = {
 }
 
 export const DirtOptions: Required<Types.DirtOptions> = {
-    chance:                 0.5,
+    chance:                         1,
 
-    count:                  [1, 3],
+    chanceForLine:                  0.5,
+    chanceForXorLine:               0.5,
+    chanceForXorBox:                0.5,
+    chanceForXorIsland:             0.5,
 
-    lineOpacity:            1,
-    lineWidth:              3,
-    lineTension:            0,
-    lineBezier:             true,
+    count:                          [1, 3],
+
+    lineOpacity:                    1,
+    lineWidth:                      3,
+    lineTension:                    0,
+    lineBezier:                     true,
+
+    xorLineWidth:                   20,
+
+    xorIslandArmCount:              30,
+    xorIslandArmRadius:             40,
+    xorIslandAccentCount:           [1, 2],
+    xorIslandAccentStrength:        1.5,
+    xorIslandAccentSensitivity:     35
 };
 
 export const DummiesOptions: Required<Types.DummiesOptions> = {

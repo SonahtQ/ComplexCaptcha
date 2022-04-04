@@ -65,6 +65,7 @@ export default class ComplexCaptcha {
     private                     $dummiesShape:      Konva.Group;
     private                     $textShape:         Konva.Group;
     private                     $dirtShape:         Konva.Group;
+    private                     $dirtXorShape:      Konva.Group;
 
     //
 
@@ -146,6 +147,22 @@ export default class ComplexCaptcha {
         });
 
         this.$layerMain1.add(this.$dirtShape);
+
+        //
+
+        
+        this.$dirtXorShape = new Konva.Group({
+            listening:  false,
+
+            //
+
+            x:                          0,
+            y:                          0,
+
+            globalCompositeOperation:   "xor",
+        });
+
+        this.$layerMain1.add(this.$dirtXorShape);
 
         //
 
@@ -397,14 +414,34 @@ export default class ComplexCaptcha {
 
         //
 
-        for ( var i=0; i<count; i++ ) {
-            const type = Math.random() < 0.5;
+        const chances = [
+            {
+                share:      this.cfg.dirt.chanceForLine,
+                callback:   () => this.renderDirtLine(false),
+            },
+            {
+                share:      this.cfg.dirt.chanceForXorLine,
+                callback:   () => this.renderDirtLine(true),
+            },
+            {
+                share:      this.cfg.dirt.chanceForXorBox,
+                callback:   () => this.renderDirtXorBox(),
+            },
+            {
+                share:      this.cfg.dirt.chanceForXorIsland,
+                callback:   () => this.renderDirtXorIsland(),
+            },
+        ].filter(x => x.share > 0);
 
-            if ( type )
-                this.renderDirtLine();
-            else
-                this.renderDirtXorBox();
-        }
+        //
+
+        for ( var i=0; i<count; i++ )
+            Tools.RandomizeArrayElementByShares(chances)?.callback();
+
+        //
+
+        if ( this.$dirtXorShape.getChildren().length )
+            this.$dirtXorShape.cache();
     }
 
     private renderDirtXorBox() {
@@ -433,7 +470,7 @@ export default class ComplexCaptcha {
 
         //
 
-        this.$dirtShape.add(new Konva.Rect({
+        this.$dirtXorShape.add(new Konva.Rect({
             listening:                      false,
             perfectDrawEnabled:             false,
 
@@ -443,14 +480,89 @@ export default class ComplexCaptcha {
             width, height,
 
             fill:                           this.palette.foreground,
-
-            globalCompositeOperation:       "xor"
         }));
     }
 
-    private renderDirtLine() {
+    private renderDirtXorIsland() {
         if ( !this.cfg.dirt )
             return;
+
+        //
+
+        const armCount = ComplexCaptchaConfig.DetermineIntegerFromParameter(this.cfg.dirt.xorIslandArmCount);
+        const armRadius = ComplexCaptchaConfig.DetermineIntegerFromParameter(this.cfg.dirt.xorIslandArmRadius);
+        const accentCount = ComplexCaptchaConfig.DetermineIntegerFromParameter(this.cfg.dirt.xorIslandAccentCount);
+        const accentStrength = ComplexCaptchaConfig.DetermineIntegerFromParameter(this.cfg.dirt.xorIslandAccentStrength);
+        const accentSensitivity = ComplexCaptchaConfig.DetermineIntegerFromParameter(this.cfg.dirt.xorIslandAccentSensitivity);
+
+        //
+
+        const center = [
+            Tools.GetRandomNumber(this.cfg.padding, this.$stage.width() - (2 * this.cfg.padding)),
+            Tools.GetRandomNumber(this.cfg.padding, this.$stage.height() - (2 * this.cfg.padding)),
+        ];
+
+        const angles = new Array(armCount).fill(0)
+            .map((x, index, arr) => 360*(index/arr.length))
+            .map(x => Tools.NormalizeAngle(x + Tools.GetRandomNumber(-10, 10)))
+            .sort((a,b) => a-b);
+
+        const accents = new Array(accentCount).fill(0)
+            .map(x => Tools.GetRandomNumber(0, 360));
+
+        const points = angles.map(angle => {
+            const accentDistances = accents
+                .map(accent => Tools.AngleDiff(angle, accent))
+                .filter(dist => dist <= accentSensitivity);
+
+            const closestAccentDistance = accentDistances.sort((a,b) => a-b)?.[0] ?? accentSensitivity;
+
+            const accentMagnitude = 1 - (closestAccentDistance / accentSensitivity);
+
+            const radius = armRadius + (armRadius * accentStrength) * accentMagnitude;
+
+            return Tools.CalcPointOnCircle(center[0], center[1], radius, angle);
+        });
+
+        //
+
+        this.$dirtXorShape.add(new Konva.Line({
+            listening:                  false,
+            perfectDrawEnabled:         false,
+
+            //
+
+            points:                     points.flat(),
+
+            fill:                       this.palette.foreground,
+
+            lineCap:                    'round',
+            lineJoin:                   'round',
+
+            tension:                    0,
+            bezier:                     true,
+
+            closed:                     true,
+        }));
+    }
+
+    private renderDirtLine(xor: boolean) {
+        if ( !this.cfg.dirt )
+            return;
+
+        //
+
+        const lineWidth = ComplexCaptchaConfig.DetermineNumberFromParameter(
+            !xor
+                ?
+                    this.cfg.dirt.lineWidth
+                :
+                    this.cfg.dirt.xorLineWidth
+        );
+
+        const lineOpacity = !xor ? this.cfg.dirt.lineOpacity : 1;
+        const lineTension = !xor ? this.cfg.dirt.lineTension : 0;
+        const lineBezier = !xor ? this.cfg.dirt.lineBezier : true;
 
         //
 
@@ -510,7 +622,7 @@ export default class ComplexCaptcha {
 
         //
 
-        const $line = new Konva.Line({
+        const konvaLineOpts: Konva.LineConfig = {
             listening:                  false,
             perfectDrawEnabled:         false,
 
@@ -518,24 +630,41 @@ export default class ComplexCaptcha {
 
             points,
 
-            shadowColor:                this.palette.semiTransparentBackground,
-            shadowBlur:                 2,
-            shadowOpacity:              1,
-            shadowOffset:               {x: 3, y: 3},
-
             stroke:                     this.palette.foreground,
-            strokeWidth:                this.cfg.dirt.lineWidth,
+            strokeWidth:                lineWidth,
         
-            opacity:                    this.cfg.dirt.lineOpacity,
+            opacity:                    lineOpacity,
 
             lineCap:                    'round',
             lineJoin:                   'round',
 
-            tension:                    this.cfg.dirt.lineTension ?? undefined,
-            bezier:                     this.cfg.dirt.lineBezier,
-        });
+            tension:                    lineTension,
+            bezier:                     lineBezier,
+        };
 
-        this.$dirtShape.add($line);
+        const konvaRegularLineOpts: Konva.LineConfig = {
+            shadowColor:                this.palette.semiTransparentBackground,
+            shadowBlur:                 2,
+            shadowOpacity:              1,
+            shadowOffset:               {x: 3, y: 3},
+        };
+
+        const konvaXorLineOpts: Konva.LineConfig = {
+        };
+
+        //
+
+        const $line = new Konva.Line(
+            Object.assign(
+                konvaLineOpts,
+                !xor ? konvaRegularLineOpts : konvaXorLineOpts
+            )
+        );
+
+        if ( !xor )
+            this.$dirtShape.add($line);
+        else
+            this.$dirtXorShape.add($line);
     }
 
     //
